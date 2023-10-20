@@ -19,6 +19,9 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
+      - name: fix file
+        run: chmod 0755 -R clash_for_windows/DEBIAN
+      
       - name: Run Script
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}

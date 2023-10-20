@@ -3,6 +3,7 @@ require 'vendor/autoload.php';
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+print_r(getenv());
 echo getenv('GITHUB_TOKEN').PHP_EOL;
 $client = new Client([
     'base_uri' => 'https://api.github.com',

@@ -1,0 +1,27 @@
+name: Auto Package
+
+on:
+  schedule:
+    - cron: "0 10 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+  
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+  
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run Script
+        run: php clash_for_windows_deb_publish.php

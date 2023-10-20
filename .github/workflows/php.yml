@@ -25,4 +25,4 @@ jobs:
       - name: Run Script
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
-        run: php clash_for_windows_deb_publish.php
+        run: php build_publish.php

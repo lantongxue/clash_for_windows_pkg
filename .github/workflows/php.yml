@@ -15,11 +15,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
   
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
       - name: Run Script
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: php clash_for_windows_deb_publish.php

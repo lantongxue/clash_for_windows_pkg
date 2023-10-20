@@ -21,7 +21,7 @@ try {
     $own_repo = json_decode($own_repo->getBody()->getContents(), true);
 
     if($own_repo['tag_name'] === $latest['tag_name']) {
-        echo $latest['tag_name'].' this version was published';exit;
+        echo $latest['tag_name'].' this version was packaged and published';exit;
     }
     
 } catch (ClientException $exception) {
@@ -48,6 +48,9 @@ foreach($latest['assets'] as $asset) {
     $base_name = str_replace('.tar.gz', '', $asset['name']);
     system('wget '.$asset['browser_download_url']);
     system('tar -zxvf '.$asset['name'].' -C clash_for_windows/opt/clash_for_windows'.' "Clash for Windows-'.$latest['tag_name'].'-x64-linux/"'. ' --strip-components 1');
+
+    $control = str_replace('{{$Version}}', $latest['tag_name'], file_get_contents('clash_for_windows/DEBIAN/control'));
+    file_put_contents('clash_for_windows/DEBIAN/control', $control);
 
     $deb_name = $base_name.'.deb';
     system('dpkg-deb -b clash_for_windows/'.' '.$deb_name);

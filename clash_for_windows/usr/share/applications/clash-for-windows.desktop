@@ -1,0 +1,15 @@
+[Desktop Entry]
+Version=1.0
+Name=Clash for Windows
+# Only KDE 4 seems to use GenericName, so we reuse the KDE strings.
+# From Ubuntu's language-pack-kde-XX-base packages, version 9.04-20090413.
+GenericName=VPN
+GenericName[zh_CN]=网络代理
+# Gnome and KDE 3 uses Comment.
+Comment=VPN
+Comment[zh_CN]=网络代理
+Exec=/opt/clash_for_windows/cfw %U
+Terminal=false
+Icon=clash-for-windows
+Type=Application
+Categories=Network;VPN;

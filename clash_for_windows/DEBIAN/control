@@ -1,0 +1,5 @@
+Package: clash-for-windows
+Version: 0.20.38
+Architecture: amd64
+Maintainer: Clash for Windows Linux
+Description: A Windows/macOS/Linux GUI based on Clash

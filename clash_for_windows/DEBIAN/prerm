@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+# Copyright 2009 The Chromium Authors
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+set -e
+
+action="$1"
+if [ "$2" = "in-favour" ]; then
+  # Treat conflict remove as an upgrade.
+  action="upgrade"
+fi
+# Don't clean-up just for an upgrade.`
+if [ "$action" = "upgrade" ] ; then
+  exit 0
+fi
+
+# Remove icons from the system icons
+XDG_ICON_RESOURCE="`command -v xdg-icon-resource 2> /dev/null || true`"
+if [ ! -x "$XDG_ICON_RESOURCE" ]; then
+  echo "Error: Could not find xdg-icon-resource" >&2
+  exit 1
+fi
+for icon in icon_48.png icon_24.png icon_128.png icon_64.png icon_256.png icon_32.png icon_16.png ; do
+  size="$(echo ${icon} | sed 's/[^0-9]//g')"
+  "$XDG_ICON_RESOURCE" uninstall --size "${size}" "clash-for-windows"
+done
+
+
+# remove services and files
+systemctl stop clash-core-service.service > /dev/null 2>&1 || true
+systemctl disable clash-core-service.service > /dev/null 2>&1 || true
+rm -f /usr/lib/systemd/system/clash-core-service.service > /dev/null 2>&1 || true
+systemctl reset-failed > /dev/null 2>&1 || true
+
+HOME_CONFIG="`getent passwd ${SUDO_UID:-$(id -u)} | cut -d: -f 6`/.config"
+rm -rf "$HOME_CONFIG/clash" > /dev/null 2>&1 || true
+rm -rf "$HOME_CONFIG/clash_win" > /dev/null 2>&1 || true
+
+UPDATE_MENUS="`command -v update-menus 2> /dev/null || true`"
+if [ -x "$UPDATE_MENUS" ]; then
+  update-menus
+fi
+
+# Update cache of .desktop file MIME types. Non-fatal since it's just a cache.
+update-desktop-database > /dev/null 2>&1 || true
